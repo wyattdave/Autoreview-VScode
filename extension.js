@@ -1,6 +1,12 @@
+const review= require ("./assets/data generator.js");
+const configs= require("./assets/config.js");
+const connectors =require("./assets/connectors.js");
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
+
+const oConfigs=configs.configs();
+const oConnextors=connectors.connectors();
 
 function activate(context) {
 
@@ -24,8 +30,19 @@ function activate(context) {
             const document = editor.document;
             const text = document.getText();
 
+			let oData=review.CreateReview(
+				text,
+				"vs code",
+				"unknown",
+				oConfigs.aComplexityTemplate,
+				oConfigs.aNamingTemplate,
+				oConnextors.aConnectionTier,
+				"no owner",
+				"no environment"
+			  ) 
+
             // Create a new untitled document and set its contents
-            const newDocument = await vscode.workspace.openTextDocument({ content: text });
+            const newDocument = await vscode.workspace.openTextDocument({ content: JSON.stringify(oData) });
             await vscode.window.showTextDocument(newDocument);
         }
     });
