@@ -1,8 +1,9 @@
 {
-  "name": "autoreview",
-  "displayName": "AutoReview",
+  "name": "autoreview-powerautomate",
+  "displayName": "AutoReview for Power Automate",
   "description": "Extracts key information from Power Automate and Logic App flows",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "icon": "assets/images/icon.png",
   "engines": {
     "vscode": "^1.94.0"
   },
@@ -11,6 +12,8 @@
   ],
   "activationEvents": [   
   ],
+  "repository": "https://github.com/wyattdave/AutoreviewVS-code",
+  "publisher":"PowerDevBox",
   "main": "./extension.js",
   "contributes": {
     "commands": [
@@ -20,7 +23,15 @@
       },
       {
         "command": "Autoreview.getJson",
-        "title": "Get Flow Review"
+        "title": "Flow Review"
+      },
+      {
+        "command": "Autoreview.getConnections",
+        "title": "Flow Connections"
+      },
+      {
+        "command": "Autoreview.getActions",
+        "title": "Flow Actions"
       }
     ]
   },

@@ -1,4 +1,4 @@
-const review= require ("./assets/data generator.js");
+const review= require ("./assets/dataGenerator.js");
 const configs= require("./assets/config.js");
 const connectors =require("./assets/connectors.js");
 const vscode = require('vscode');
@@ -7,18 +7,15 @@ const path = require('path');
 
 const oConfigs=configs.configs();
 const oConnectors=connectors.connectors();
-console.log(oConnectors)
+
 function activate(context) {
 
 	console.log('Congratulations, your extension "Autoreview" is now active!');
 
 	const arDetails = vscode.commands.registerCommand('Autoreview.details', function () {
 		const oData=getJSON();
-		const sDetails=oData.trigger
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from AutoReview!'+sDetails);
-
+		const sDetails="Actions: "+oData.steps+" |  Trigger: "+oData.trigger+" | Premium: "+oData.premium;
+		vscode.window.showInformationMessage(sDetails);
 	});
 
 	context.subscriptions.push(arDetails);
@@ -30,6 +27,24 @@ function activate(context) {
     });
 
     context.subscriptions.push(arJson);
+
+	let arJsonConnections= vscode.commands.registerCommand('Autoreview.getConnections', async function () {
+        const oData=getJSON();	
+		const newDocument = await vscode.workspace.openTextDocument({ content: JSON.stringify(oData.connectionArray, null, 4) });
+		await vscode.window.showTextDocument(newDocument);	
+    });
+
+    context.subscriptions.push(arJsonConnections);
+	
+	let arJsonSteps = vscode.commands.registerCommand('Autoreview.getActions', async function () {
+        const oData=getJSON();	
+
+		let aActions = removeKey(oData.actionObjectArray,"hashId")
+		const newDocument = await vscode.workspace.openTextDocument({ content: JSON.stringify(aActions, null, 4) });
+		await vscode.window.showTextDocument(newDocument);	
+    });
+
+    context.subscriptions.push(arJsonSteps);
 }
 
 function deactivate() {}
@@ -63,4 +78,11 @@ function getJSON(){
 	}else{
 		return "Flow not found"
 	}
+}
+
+function removeKey(array, key) {
+	array.forEach(obj => {
+		delete obj[key];
+	});
+	return array;
 }

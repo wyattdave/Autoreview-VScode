@@ -1,65 +1,54 @@
 # Autoreview README
-
-This is the README for your extension "Autoreview". After writing up a brief description, we recommend including the following sections.
+Code Review tool for Power Automate and Logic Apps
 
 ## Features
+Extracts key information from Power Automate solutoin file.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### Flow Review
+Extracts key information and scores flow based on AutoReview standard config.
 
-For example if there is an image subfolder under your extension project workspace:
+![Extracts info](https://github.com/wyattdave/AutoreviewVS-code/assets/images/review.gif)
 
-\!\[feature X\]\(images/feature-x.png\)
+### Flow Actions
+Lists all flow actions
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### Flow Connections
+Lists all flow connections
 
-## Requirements
+### Flow Deails
+Quick show message showing count of actions, trigger, and if it is premium
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## Guide
+- Export flow solution
+- Unzip solution
+- Navigate to flows in Workflows folder
+- Open flow json file
 
-## Extension Settings
+![Eworkflows in zip](https://github.com/wyattdave/AutoreviewVS-code/assets/images/files.png)
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+- Ctrl+shift+p
 
-For example:
+![options](https://github.com/wyattdave/AutoreviewVS-code/assets/images/options.png)
 
-This extension contributes the following settings:
+- Select action
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## More info
+AutoReview is also available in:
+
+- Chromium Extentsion
+- Pogressive Web App
+- Power Platfrom Connector
+- API
+
+Find out more information here: [https://powerdevbox.com/autoreview.html](https://powerdevbox.com/autoreview.html)
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+None so far, but its early days 😎
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
+Initial release of AutoReview 
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
