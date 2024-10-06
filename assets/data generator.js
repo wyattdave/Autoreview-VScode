@@ -34,6 +34,15 @@ const regExpEnviron2 = new RegExp("@{parameters(.*?)\\)", "gm");
     let sTriggerInputs = "none";
     let sTriggerRecur = "none";
 
+console.log(
+    sName,
+    sId,
+    aComplexity,
+    aNaming,
+    aConnectionTier,
+    sOwner,
+    sEnvironment)
+
     if (sOwner == "" || sOwner == undefined) {
     sOwner = "please input";
     }

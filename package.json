@@ -1,5 +1,5 @@
 {
-  "name": "Autoreview",
+  "name": "autoreview",
   "displayName": "AutoReview",
   "description": "Extracts key information from Power Automate and Logic App flows",
   "version": "0.0.1",
@@ -9,8 +9,7 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:Autoreview.getJson"
+  "activationEvents": [   
   ],
   "main": "./extension.js",
   "contributes": {

@@ -6,8 +6,8 @@ const fs = require('fs');
 const path = require('path');
 
 const oConfigs=configs.configs();
-const oConnextors=connectors.connectors();
-
+const oConnectors=connectors.connectors();
+console.log(oConnectors)
 function activate(context) {
 
 	console.log('Congratulations, your extension "Autoreview" is now active!');
@@ -35,12 +35,12 @@ function activate(context) {
 				"vs code",
 				"unknown",
 				oConfigs.aComplexityTemplate,
-				oConfigs.aNamingTemplate,
-				oConnextors.aConnectionTier,
+				oConfigs.oNamingTemplate,
+				oConnectors.value,
 				"no owner",
 				"no environment"
 			  ) 
-
+console.log(oData)
             // Create a new untitled document and set its contents
             const newDocument = await vscode.workspace.openTextDocument({ content: JSON.stringify(oData) });
             await vscode.window.showTextDocument(newDocument);
