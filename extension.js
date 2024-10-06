@@ -11,40 +11,22 @@ console.log(oConnectors)
 function activate(context) {
 
 	console.log('Congratulations, your extension "Autoreview" is now active!');
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('Autoreview.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
+
+	const arDetails = vscode.commands.registerCommand('Autoreview.details', function () {
+		const oData=getJSON();
+		const sDetails=oData.trigger
 
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from AutoReview!');
+		vscode.window.showInformationMessage('Hello World from AutoReview!'+sDetails);
 
 	});
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(arDetails);
 
     let arJson = vscode.commands.registerCommand('Autoreview.getJson', async function () {
-        const editor = vscode.window.activeTextEditor;
-        if (editor) {
-            const document = editor.document;
-            const text = document.getText();
-
-			let oData=review.CreateReview(
-				text,
-				"vs code",
-				"unknown",
-				oConfigs.aComplexityTemplate,
-				oConfigs.oNamingTemplate,
-				oConnectors.value,
-				"no owner",
-				"no environment"
-			  ) 
-console.log(oData)
-            // Create a new untitled document and set its contents
-            const newDocument = await vscode.workspace.openTextDocument({ content: JSON.stringify(oData) });
-            await vscode.window.showTextDocument(newDocument);
-        }
+        const oData=getJSON();	
+		const newDocument = await vscode.workspace.openTextDocument({ content: JSON.stringify(oData, null, 4) });
+		await vscode.window.showTextDocument(newDocument);	
     });
 
     context.subscriptions.push(arJson);
@@ -56,3 +38,29 @@ module.exports = {
     activate,
     deactivate
 };
+
+function getJSON(){
+	const editor = vscode.window.activeTextEditor;
+	if (editor) {
+		const document = editor.document;
+		const sText = document.getText();
+
+		try{
+			let oData=review.CreateReview(
+				sText,
+				"vs code",
+				"unknown",
+				oConfigs.aComplexityTemplate,
+				oConfigs.oNamingTemplate,
+				oConnectors.value,
+				"no owner",
+				"no environment"
+			)
+			return oData
+		} catch(error){
+			return "Vaild flow not found"
+		}
+	}else{
+		return "Flow not found"
+	}
+}

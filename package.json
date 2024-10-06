@@ -15,12 +15,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "Autoreview.helloWorld",
-        "title": "Hello World"
+        "command": "Autoreview.details",
+        "title": "Flow Details"
       },
       {
         "command": "Autoreview.getJson",
-        "title": "Get Flow Details"
+        "title": "Get Flow Review"
       }
     ]
   },
