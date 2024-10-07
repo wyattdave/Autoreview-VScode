@@ -2,7 +2,7 @@
   "name": "autoreview-powerautomate",
   "displayName": "AutoReview for Power Automate",
   "description": "Extracts key information from Power Automate and Logic App flows",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "icon": "assets/images/icon.png",
   "engines": {
     "vscode": "^1.82.2"
@@ -32,6 +32,10 @@
       {
         "command": "Autoreview.getActions",
         "title": "Flow Actions"
+      },
+      {
+        "command": "Autoreview.getDiagram",
+        "title": "Flow getDiagram"
       }
     ]
   },

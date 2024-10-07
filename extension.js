@@ -1,12 +1,10 @@
 const review= require ("./assets/dataGenerator.js");
 const configs= require("./assets/config.js");
 const connectors =require("./assets/connectors.js");
-const vscode = require('vscode');
-const fs = require('fs');
-const path = require('path');
-
+const vscode = require("vscode");
 const oConfigs=configs.configs();
 const oConnectors=connectors.connectors();
+const diagram=require("./assets/diagram.js");
 
 function activate(context) {
 
@@ -32,6 +30,7 @@ function activate(context) {
         const oData=getJSON();	
 		const newDocument = await vscode.workspace.openTextDocument({ content: JSON.stringify(oData.connectionArray, null, 4) });
 		await vscode.window.showTextDocument(newDocument);	
+		
     });
 
     context.subscriptions.push(arJsonConnections);
@@ -45,6 +44,19 @@ function activate(context) {
     });
 
     context.subscriptions.push(arJsonSteps);
+
+	let arDiagram = vscode.commands.registerCommand('Autoreview.getDiagram', function () {
+		const oData=getJSON();	
+		const {renderSvg} =require("./assets/nomnoml");
+		const sDiagram = diagram.createDiagram(oData.actionArray,oData.name,oData.trigger,oData.actionObjectArray);
+        const panel = vscode.window.createWebviewPanel(
+            'htmlPreview', 'Flow Diagram', vscode.ViewColumn.One,
+            {} 
+        );
+        panel.webview.html = renderSvg(sDiagram);
+	});
+
+	context.subscriptions.push(arDiagram);
 }
 
 function deactivate() {}

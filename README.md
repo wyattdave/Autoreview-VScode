@@ -15,6 +15,9 @@ Lists all flow actions
 ### Flow Connections
 Lists all flow connections
 
+### Flow Diagram
+Shows visual diagram of the flow (powered by nomnoml)
+
 ### Flow Deails
 Quick show message showing count of actions, trigger, and if it is premium
 
@@ -48,7 +51,10 @@ None so far, but its early days 😎
 
 ## Release Notes
 
-### 1.0.0
+### 1.0.1
 
 Initial release of AutoReview 
 
+### 1.0.2
+
+Added diagram
