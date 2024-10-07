@@ -7,7 +7,7 @@ Extracts key information from Power Automate solutoin file.
 ### Flow Review
 Extracts key information and scores flow based on AutoReview standard config.
 
-![Extracts info](https://github.com/wyattdave/AutoreviewVS-code/assets/images/review.gif)
+![Extracts info](https://powerdevbox.com/images/vsCode/review.gif)
 
 ### Flow Actions
 Lists all flow actions
@@ -24,11 +24,11 @@ Quick show message showing count of actions, trigger, and if it is premium
 - Navigate to flows in Workflows folder
 - Open flow json file
 
-![Eworkflows in zip](https://github.com/wyattdave/AutoreviewVS-code/assets/images/files.png)
+![Eworkflows in zip](https://powerdevbox.com/images/vsCode/files.png)
 
 - Ctrl+shift+p
 
-![options](https://github.com/wyattdave/AutoreviewVS-code/assets/images/options.png)
+![options](https://powerdevbox.com/images/vsCode/options.png)
 
 - Select action
 
