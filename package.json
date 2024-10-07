@@ -2,10 +2,10 @@
   "name": "autoreview-powerautomate",
   "displayName": "AutoReview for Power Automate",
   "description": "Extracts key information from Power Automate and Logic App flows",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "icon": "assets/images/icon.png",
   "engines": {
-    "vscode": "^1.94.0"
+    "vscode": "^1.82.2"
   },
   "categories": [
     "Other"
@@ -41,9 +41,9 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.94.0",
+    "@types/vscode": "^1.82.2",
     "@types/mocha": "^10.0.8",
-    "@types/node": "20.x",
+    "@types/node": "18.x",
     "eslint": "^9.11.1",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1"
