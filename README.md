@@ -58,3 +58,7 @@ Initial release of AutoReview
 ### 1.0.2
 
 Added diagram
+
+### 1.0.3
+
+Improved compatability
