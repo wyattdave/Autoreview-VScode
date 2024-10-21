@@ -12,7 +12,7 @@
   ],
   "activationEvents": [   
   ],
-  "repository": "https://github.com/wyattdave/AutoreviewVS-code",
+  "repository": "https://github.com/wyattdave/Autoreview-VScode",
   "publisher":"PowerDevBox",
   "main": "./extension.js",
   "contributes": {
