@@ -2,8 +2,33 @@
 
 All notable changes to the "Autoreview" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## 1.0.1 
+### Added
+Initial release of AutoReview 
 
-## [Unreleased]
+### Fixed
+n/a
 
-- Initial release
+## 1.0.2
+
+### Added
+Added diagram
+
+### Fixed
+n/a
+
+## 1.0.3
+
+### Added
+Improved compatability
+
+### Fixed
+n/a
+
+## 1.0.4
+
+### Added
+n/a
+
+### Fixed
+Bug fix on certain definition schemas

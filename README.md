@@ -27,7 +27,9 @@ Quick show message showing count of actions, trigger, and if it is premium
 - Navigate to flows in Workflows folder
 - Open flow json file
 
-![Eworkflows in zip](https://powerdevbox.com/images/vsCode/files.png)
+Full guide: [https://docs.powerdevbox.com/autoreview/autoreview-vs-code-extension](https://docs.powerdevbox.com/autoreview/autoreview-vs-code-extension)
+
+![workflows in zip](https://powerdevbox.com/images/vsCode/files.png)
 
 - Ctrl+shift+p
 
@@ -62,3 +64,7 @@ Added diagram
 ### 1.0.3
 
 Improved compatability
+
+### 1.0.4
+
+bug fix on certain definition schemas

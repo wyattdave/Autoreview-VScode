@@ -1,4 +1,104 @@
-function createDiagram(e,l,n,a){let i="#fillArrows: true\n#lineWidth: 2\n#fill:#569AE5\n#background: white\n#acyclicer: greedy\n#ranker: tight-tree\n#.data: visual=database fill=#EBDAF9\n#.trigger: visual=roundrect fill=#569AE5\n#.if: visual=rhomb fill=#2596be\n#.switch: visual=ellipse fill=#2596be\n#.scope: visual=frame fill=#808080\n#.foreach: visual=transceiver fill=#00C1A0\n#.until: visual=sender fill=#00C1A0\n#.var: visual=input fill=#9925be\n#.terminate: visual=receiver fill=#cc4747\n#.var: visual=input fill=#EBDAF9\n";return e.forEach(e=>{let l=e.position.replaceAll("||","").substring(1,e.position.length-1).split("|"),t=e.positionIndex.substring(1,e.positionIndex.length).split("|"),r=e.positionType.substring(1,e.positionType.length).split("|");l.forEach((p,c)=>{if(l.length>0&&""!=t[c]&&r.length==l.length&&null!=p&&""!=p){let s,o,g="";console.log(r[c]),("Switch"==r[c]||"If"==r[c]||"Scope"==r[c]||"Foreach"==r[c]||"Until"==r[c])&&"Internal"!=e.positionInfo?o="--:>":(o="->",g=e.branch);let u=a[parseInt(t[c])-1];s="Switch"==r[c]?"\n[<switch>"+p.replace(/[":\[|{}()\]]+/g,"")+"]"+o+" "+g:"If"==r[c]?"\n[<if>"+p.replace(/[":\[|{}()\]]+/g,"")+"]"+o+" "+g:"Foreach"==r[c]?"\n[<foreach>"+p.replace(/[":\[|{}()\]]+/g,"")+"]"+o:"Until"==r[c]?"\n[<until>"+p.replace(/[":\[|{}()\]]+/g,"")+"]"+o:"Scope"==r[c]?"\n[<scope>"+p.replace(/[":\[|{}()\]]+/g,"")+"]"+o:"trigger"==p.replace(/[":\[|{}()\]]+/g,"")?"\n[<trigger> *"+n+"]"+o:"Terminate"==p.replace(/[":\[|{}()\]]+/g,"")?"\n[<terminate>"+p.replace(/[":\[|{}()\]]+/g,"")+"]"+o:u.type.includes("Variable")||u.type.includes("Compose")||r[c].includes("Variable")||r[c].includes("Compose")?"\n[<var>"+p.replace(/[":\[|{}()\]]+/g,"")+"]"+o:"Table"==r[c]||"ParseJson"==r[c]||"Select"==r[c]||"Join"==r[c]||"Query"==r[c]?"\n[<data>"+p.replace(/[":\[|{}()\]]+/g,"")+"]"+o:"\n["+p.replace(/[":\[|{}()\]]+/g,"")+"]"+o,i+=s="Switch"==e.type?s+"[<switch>"+e.name.replace(/[":\[|{}()\]]+/g,"")+"]":"If"==e.type?s+"[<if>"+e.name.replace(/[":\[|{}()\]]+/g,"")+"]":"Foreach"==e.type?s+"[<foreach>"+e.name.replace(/[":\[|{}()\]]+/g,"")+"]":"Until"==e.type?s+"[<until>"+e.name.replace(/[":\[|{}()\]]+/g,"")+"]":"Scope"==e.type?s+"[<scope>"+e.name.replace(/[":\[|{}()\]]+/g,"")+"]":"Terminate"==e.type?s+"[<terminate>"+e.name.replace(/[":\[|{}()\]]+/g,"")+"]":e.type.includes("Variable")||e.type.includes("Compose")?s+"[<var>"+e.name.replace(/[":\[|{}()\]]+/g,"")+"]":"Table"==e.type||"ParseJson"==e.type||"Select"==e.type||"Join"==e.type||"Query"==e.type?s+"[<data>"+e.name.replace(/[":\[|{}()\]]+/g,"")+"]":"Table"==e.type||"ParseJson"==e.type||"Select"==e.type||"Join"==e.type||"Query"==e.type?s+"[<data>"+e.name.replace(/[":\[|{}()\]]+/g,"")+"]":s+"["+e.name.replace(/[":\[|{}()\]]+/g,"")+"]"}})}),i}
+function createDiagram(data,name,trigger,objects){
+
+  let sStart="#fillArrows: true\n#lineWidth: 2\n#fill:#569AE5\n#background: white\n#acyclicer: greedy\n#ranker: tight-tree\n#.data: visual=database fill=#EBDAF9\n#.trigger: visual=roundrect fill=#569AE5\n#.if: visual=rhomb fill=#2596be\n#.switch: visual=ellipse fill=#2596be\n#.scope: visual=frame fill=#808080\n#.foreach: visual=transceiver fill=#00C1A0\n#.until: visual=sender fill=#00C1A0\n#.var: visual=input fill=#9925be\n#.terminate: visual=receiver fill=#cc4747\n#.var: visual=input fill=#EBDAF9\n";
+
+  let sDiagram=sStart;
+  data.forEach((item) => {
+      let sTempRaw=item.position.replaceAll('||','')
+      let sTemp=sTempRaw.substring(1,item.position.length-1);
+      let aPrevious=sTemp.split('|');
+      let aPreviousIndex=item.positionIndex.substring(1,item.positionIndex.length).split('|');
+      let aPreviousType=item.positionType.substring(1,item.positionType.length).split('|');
+
+      aPrevious.forEach((val,i) =>{
+
+        if(aPrevious.length>0 && aPreviousIndex[i]!="" && aPreviousType.length==aPrevious.length && val!=null && val!=""){
+          let sEntry;
+          let sArrow
+          let sBranch="";
+          console.log(aPreviousType[i])
+          if((aPreviousType[i]=="Switch" || aPreviousType[i]=="If" || aPreviousType[i]=="Scope" || aPreviousType[i]=="Foreach" || aPreviousType[i]=="Until")&&item.positionInfo!='Internal'){
+            sArrow='--:>';
+          }else{
+            sArrow='->';
+            sBranch=item.branch;
+          }
+          console.log(sArrow)
+          let oPreviousItem=objects[parseInt(aPreviousIndex[i])-1] 
+          //console.log(aPreviousIndex[i]-1,val,item.name,oPreviousItem)
+          if (aPreviousType[i] == "Switch" ) {
+            sEntry = '\n[<switch>'+val.replace(/[":\[|{}()\]]+/g, '')+']'+sArrow+" "+sBranch;
+      
+          }else if ( aPreviousType[i] == "If" ){  
+            sEntry = '\n[<if>'+val.replace(/[":\[|{}()\]]+/g, '')+']'+sArrow+" "+sBranch;
+          
+          }else if ( aPreviousType[i] == "Foreach"){        
+            sEntry = '\n[<foreach>'+val.replace(/[":\[|{}()\]]+/g, '')+']'+sArrow;
+
+          }else if (aPreviousType[i] == "Until" ){        
+            sEntry = '\n[<until>'+val.replace(/[":\[|{}()\]]+/g, '')+']'+sArrow;      
+
+          }else if (aPreviousType[i] == "Scope"){
+            sEntry = '\n[<scope>'+val.replace(/[":\[|{}()\]]+/g, '')+']'+sArrow;
+          
+          }else if (val.replace(/[":\[|{}()\]]+/g, '') == "trigger"){
+            sEntry = '\n[<trigger> *'+trigger+']'+sArrow;
+
+          }else if (val.replace(/[":\[|{}()\]]+/g, '') == "Terminate"){
+            sEntry = '\n[<terminate>'+val.replace(/[":\[|{}()\]]+/g, '')+']'+sArrow;  
+
+          }else if (oPreviousItem.type.includes("Variable") || oPreviousItem.type.includes("Compose") || aPreviousType[i] .includes("Variable") || aPreviousType[i] .includes("Compose")){
+            sEntry = '\n[<var>'+val.replace(/[":\[|{}()\]]+/g, '')+']'+sArrow; 
+         
+          }else if ( aPreviousType[i] == "Table" || aPreviousType[i] == "ParseJson" || aPreviousType[i] == "Select"  || aPreviousType[i] == "Join" || aPreviousType[i] == "Query" ){        
+            sEntry = '\n[<data>'+val.replace(/[":\[|{}()\]]+/g, '')+']'+sArrow;      
+           
+          }else{
+            sEntry = '\n['+val.replace(/[":\[|{}()\]]+/g, '')+']'+sArrow;
+          }  
+
+
+          if (item.type == "Switch" ) {        
+            sEntry = sEntry+'[<switch>'+item.name.replace(/[":\[|{}()\]]+/g, '')+']'
+
+          }  else if (item.type == "If" ) {        
+              sEntry = sEntry+'[<if>'+item.name.replace(/[":\[|{}()\]]+/g, '')+']'
+
+          }else if (item.type == "Foreach" ){
+            sEntry = sEntry+'[<foreach>'+item.name.replace(/[":\[|{}()\]]+/g, '')+']'
+
+          }else if (item.type == "Until"  ){
+            sEntry = sEntry+'[<until>'+item.name.replace(/[":\[|{}()\]]+/g, '')+']'
+
+          }else if (item.type == "Scope" ){
+            sEntry = sEntry+'[<scope>'+item.name.replace(/[":\[|{}()\]]+/g, '')+']'
+            
+          }else if (item.type == "Terminate" ){
+            sEntry = sEntry+'[<terminate>'+item.name.replace(/[":\[|{}()\]]+/g, '')+']'
+          
+          }else if (item.type.includes("Variable") || item.type.includes("Compose")){
+            sEntry = sEntry+'[<var>'+item.name.replace(/[":\[|{}()\]]+/g, '')+']'
+
+          }else if ( item.type == "Table" || item.type == "ParseJson" || item.type== "Select"  || item.type == "Join" || item.type == "Query" ){        
+            sEntry = sEntry+'[<data>'+item.name.replace(/[":\[|{}()\]]+/g, '')+']' 
+
+          }else if ( item.type == "Table" || item.type == "ParseJson" || item.type== "Select"  || item.type == "Join" || item.type == "Query" ){        
+            sEntry = sEntry+'[<data>'+item.name.replace(/[":\[|{}()\]]+/g, '')+']' 
+
+          }else{
+            sEntry = sEntry+'['+item.name.replace(/[":\[|{}()\]]+/g, '')+']'
+          }
+    
+        sDiagram =sDiagram+sEntry
+      
+      }
+    })
+  });
+
+  return sDiagram
+
+}    
+
 module.exports = {
   createDiagram
 };
