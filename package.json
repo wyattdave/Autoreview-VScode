@@ -2,7 +2,7 @@
   "name": "autoreview-powerautomate",
   "displayName": "AutoReview for Power Automate",
   "description": "Extracts key information from Power Automate and Logic App flows",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "icon": "assets/images/icon.png",
   "engines": {
     "vscode": "^1.70.2"
