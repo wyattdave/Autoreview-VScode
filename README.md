@@ -67,4 +67,8 @@ Improved compatability
 
 ### 1.0.4
 
-bug fix on certain definition schemas
+Bug fix on certain definition schemas
+
+## 1.0.5
+
+Changed connectionReference to connection Reference name

@@ -32,3 +32,11 @@ n/a
 
 ### Fixed
 Bug fix on certain definition schemas
+
+## 1.0.5
+
+### Added
+Changed connectionReference to connection Reference name. More Details: [https://docs.powerdevbox.com](https://docs.powerdevbox.com/autoreview/v2-v3.2.0-update#connectionarray)
+
+### Fixed
+n/a
