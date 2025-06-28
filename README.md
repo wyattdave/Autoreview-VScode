@@ -67,4 +67,12 @@ Improved compatability
 
 ### 1.0.4
 
-bug fix on certain definition schemas
+Bug fix on certain definition schemas
+
+## 1.0.5
+
+Changed connectionReference to connection Reference name
+
+# 1.0.6
+
+Occassional issue with parent actions loading json not string and breaking diagram fixed

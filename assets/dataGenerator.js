@@ -512,6 +512,9 @@ function getNesting(parent,aActionReturn) {
 }
 
 function getChildren(object, aReturn, nested, parent) {
+    if(typeof parent === 'object'){
+        parent=parent.operationName
+    }
     if (object?.actions != undefined) {
         const keys = Object.keys(object.actions);
         keys.forEach((key) => {
