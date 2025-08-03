@@ -47,3 +47,10 @@ n/a
 
 ### Fixed
 Occassional issue with parent actions loading json not string and breaking diagram fixed
+
+# 1.0.7
+
+### Added
+environmentCount - Counts environment variables in action
+### Fixed
+Fixed false environment variable flag for conditions and switches
