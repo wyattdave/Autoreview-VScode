@@ -194,29 +194,36 @@ function CreateReview(
         }
 
         let oTempItem = item;
-        if (oTempItem.hasOwnProperty("actions")) {
-            delete oTempItem.actions;
+       
+        removeNestedActions(oTempItem);
+         if (oTempItem.hasOwnProperty("cases")) {
+            delete oTempItem.cases;
         }
 
-        let aEnvironVar=[];
-        aEnvironVar = JSON.stringify(removeCircularReferences(oTempItem)).match(regExpEnviron);
+        let aEnvironVar = JSON.stringify(removeCircularReferences(oTempItem)).match(regExpEnviron);
 
         let bEnvironVar = false;
+        let iEnvironVar = 0;
         if (aEnvironVar) {
+            console.log(JSON.stringify(removeCircularReferences(oTempItem)));
             aEnvironVar = aEnvironVar.filter(
             (object) => object != "@parameters('$authentication')"
             );
+            iEnvironVar = aEnvironVar.length;
             if (aEnvironVar.length > 0) {
                 bEnvironVar = true;
+
             }
         }
 
         if (!bEnvironVar) {
             aEnvironVar = JSON.stringify(removeCircularReferences(oTempItem)).match(regExpEnviron2);
             if (aEnvironVar) {
+                console.log(JSON.stringify(removeCircularReferences(oTempItem)));
             aEnvironVar = aEnvironVar.filter(
                 (object) => object != "@{parameters('$authentication')"
             );
+             iEnvironVar += aEnvironVar.length;
             if (aEnvironVar.length > 0) {
                 bEnvironVar = true;
             }
@@ -269,6 +276,7 @@ function CreateReview(
             positionInfo: sPostionInfo,
             environmentVariables: JSON.stringify(aEnvironVar),
             environmentB: bEnvironVar,
+            environmentCount: iEnvironVar,
             notes: sNotes,
             parent: item.parent,
             apiId: sConApiID,
@@ -621,6 +629,20 @@ function removeCircularReferences(obj, seen = new WeakSet()) {
     }
     return obj;
 }
+
+  // Recursively delete all nested 'actions' properties
+        function removeNestedActions(obj) {
+            if (obj && typeof obj === 'object') {
+                if (obj.hasOwnProperty('actions')) {
+                    delete obj.actions;
+                }
+                for (const key in obj) {
+                    if (obj.hasOwnProperty(key) && typeof obj[key] === 'object') {
+                        removeNestedActions(obj[key]);
+                    }
+                }
+            }
+        }
 
 module.exports={
     CreateReview
