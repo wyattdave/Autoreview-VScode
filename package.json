@@ -2,7 +2,7 @@
   "name": "autoreview-powerautomate",
   "displayName": "AutoReview for Power Automate",
   "description": "Extracts key information from Power Automate and Logic App flows",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "icon": "assets/images/icon.png",
   "engines": {
     "vscode": "^1.70.2"
@@ -10,7 +10,13 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [   
+  "activationEvents": [
+    "onCommand:Autoreview.details",
+    "onCommand:Autoreview.getJson",
+    "onCommand:Autoreview.getConnections",
+    "onCommand:Autoreview.getActions",
+    "onCommand:Autoreview.getMarkdown",
+    "onCommand:Autoreview.getDiagram"
   ],
   "repository": "https://github.com/wyattdave/Autoreview-VScode",
   "publisher":"PowerDevBox",
@@ -19,22 +25,32 @@
     "commands": [
       {
         "command": "Autoreview.details",
+        "category": "AutoReview",
         "title": "Flow Details"
       },
       {
         "command": "Autoreview.getJson",
+        "category": "AutoReview",
         "title": "Flow Review"
       },
       {
         "command": "Autoreview.getConnections",
+        "category": "AutoReview",
         "title": "Flow Connections"
       },
       {
         "command": "Autoreview.getActions",
+        "category": "AutoReview",
         "title": "Flow Actions"
       },
       {
+        "command": "Autoreview.getMarkdown",
+        "category": "AutoReview",
+        "title": "Flow Markdown Report"
+      },
+      {
         "command": "Autoreview.getDiagram",
+        "category": "AutoReview",
         "title": "Flow Diagram"
       }
     ]

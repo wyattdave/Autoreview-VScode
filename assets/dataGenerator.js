@@ -1,17 +1,17 @@
-const sExceptLink ="concat('https://make.powerautomate.com/manage/environments/', workflow()?['tags']?['environmentName']";
-const sExceptLink2 ="concat('https://make.powerautomate.com/manage/environments/',workflow()?['tags']?['environmentName']";
+const sExceptLink = "concat('https://make.powerautomate.com/manage/environments/', workflow()?['tags']?['environmentName']";
+const sExceptLink2 = "concat('https://make.powerautomate.com/manage/environments/',workflow()?['tags']?['environmentName']";
 const regExpEnviron = new RegExp("@parameters(.*?)\\)", "gm");
 const regExpEnviron2 = new RegExp("@{parameters(.*?)\\)", "gm");
 
 function CreateReview(
-  $inputString,
-  sName,
-  sId,
-  aComplexity,
-  aNaming,
-  aConnectionTier,
-  sOwner,
-  sEnvironment
+    $inputString,
+    sName,
+    sId,
+    aComplexity,
+    aNaming,
+    aConnectionTier,
+    sOwner,
+    sEnvironment
 ) {
     let aActionReturn = [];
     let aVariableReturn = [];
@@ -19,10 +19,11 @@ function CreateReview(
     let aExceptionList = [];
     let aApiList = [];
     let aActionObjects = [];
-    let aConnectionReferences=[];
+    let aConnectionReferences = [];
     let sError = "";
 
     let sTrigger = "unknown";
+    let sTriggerType = "unknown";
     let sTriggerParam = "none";
     let sTriggerData = "none";
     let sTriggerConfig = "none";
@@ -31,7 +32,7 @@ function CreateReview(
     let sTriggerRecur = "none";
 
     if (sOwner == "" || sOwner == undefined) {
-    sOwner = "please input";
+        sOwner = "please input";
     }
 
     const oInput = JSON.parse($inputString);
@@ -41,7 +42,7 @@ function CreateReview(
         0,
         "root"
     );
-    
+
     if (oInput.properties?.displayName != undefined) {
         sName = oInput.properties.displayName;
         sId = oInput.name;
@@ -53,22 +54,25 @@ function CreateReview(
         const aConnectionKeys = Object.keys(oInput.properties.connectionReferences);
         aConnectionKeys.forEach((key) => {
             const value = oInput.properties.connectionReferences[key];
-            if(value?.connection?.connectionReferenceLogicalName != null){                
+            if (value?.connection?.connectionReferenceLogicalName != null) {
                 aConnectionReferences.push(
                     {
-                        connection:key,
-                        referenceName:value.connection.connectionReferenceLogicalName,
-                        type:value.api.name                    
+                        connection: key,
+                        referenceName: value.connection.connectionReferenceLogicalName,
+                        type: value.api.name
                     }
                 )
             }
-        })    
+        })
     }
 
     const aTriggerKeys = Object.keys(oInput.properties.definition.triggers);
     aTriggerKeys.forEach((key) => {
         const value = oInput.properties.definition.triggers[key];
         sTrigger = key;
+        if (value?.type != null) {
+            sTriggerType = value.type;
+        }
         if (value?.inputs?.schema != null) {
             sTriggerParam = JSON.stringify(value.inputs);
         }
@@ -78,12 +82,14 @@ function CreateReview(
         if (value?.inputs?.parameters != null) {
             sTriggerData = JSON.stringify(value.inputs.parameters);
         }
-        if (value?.recurrance != null) {
-            sTriggerRecur = value.recurrance;
+        if (value?.recurrence != null) {
+            sTriggerRecur = JSON.stringify(value.recurrence);
+        } else if (value?.recurrance != null) {
+            sTriggerRecur = JSON.stringify(value.recurrance);
         }
         if (value?.conditions != null) {
             if (value.conditions[0]?.expression != null) {
-            sTriggerExpress = value.conditions[0].expression;
+                sTriggerExpress = value.conditions[0].expression;
             }
         }
         if (value?.inputs?.schema?.properties != null) {
@@ -119,7 +125,7 @@ function CreateReview(
                 c.name.includes(sConnector.substring(0, sConnector.length - 2).trim())
             );
             if (sConnector == "shared_sendmail" || sConnector == "shared_teams") {
-            sNewTier = "Standard";
+                sNewTier = "Standard";
             } else if (sNewConnectorInfo != undefined) {
                 sNewTier = sNewConnectorInfo.properties.tier;
                 sNewImgURL = sNewConnectorInfo.properties.iconUri;
@@ -131,20 +137,20 @@ function CreateReview(
         let sRunAfter = "";
         let sPosition = "|";
         let sException = "Non-Exception";
-        if (JSON.stringify(item.runAfter) == "{}" || item.runAfter==undefined || item.runAfter== null) {
-            sRunAfter= item.parent+":Success";
-        }else{
+        if (JSON.stringify(item.runAfter) == "{}" || item.runAfter == undefined || item.runAfter == null) {
+            sRunAfter = item.parent + ":Succeeded";
+        } else {
             const keys = Object.keys(item.runAfter);
             keys.forEach((key) => {
-            sPosition += key + "|";
-            sRunAfter =
-                key + ":" + JSON.stringify(item.runAfter[key]).replaceAll(",", " | ");
-            if (JSON.stringify(item.runAfter[key]).includes("Failed")) {
-                sException = "Exception";
-            }
+                sPosition += key + "|";
+                sRunAfter =
+                    key + ":" + JSON.stringify(item.runAfter[key]).replaceAll(",", " | ");
+                if (JSON.stringify(item.runAfter[key]).includes("Failed")) {
+                    sException = "Exception";
+                }
             });
         }
-    
+
         if (sPosition == "|" && item.nestedLevel == 0) {
             sPosition = "|trigger|";
         }
@@ -182,7 +188,7 @@ function CreateReview(
         }
         let sSecure = "";
         if (item?.runtimeConfiguration?.secureData != null) {
-            sSecure = JSON.stringify(item.runtimeConfiguration.secureData).replace('{"properties":[','').replace(']}','').replaceAll('"','');
+            sSecure = JSON.stringify(item.runtimeConfiguration.secureData).replace('{"properties":[', '').replace(']}', '').replaceAll('"', '');
         }
         let sTimeout = "";
         if (item?.limit?.timeout != null) {
@@ -194,44 +200,42 @@ function CreateReview(
         }
 
         let oTempItem = item;
-       
+
         removeNestedActions(oTempItem);
-         if (oTempItem.hasOwnProperty("cases")) {
+        if (oTempItem.hasOwnProperty("cases")) {
             delete oTempItem.cases;
         }
 
-        let aEnvironVar = JSON.stringify(removeCircularReferences(oTempItem)).match(regExpEnviron);
+        let aTempEnvirVar = JSON.stringify(removeCircularReferences(oTempItem)).match(regExpEnviron);
+        let aEnvironVar;
 
         let bEnvironVar = false;
         let iEnvironVar = 0;
-        if (aEnvironVar) {
-            console.log(JSON.stringify(removeCircularReferences(oTempItem)));
-            aEnvironVar = aEnvironVar.filter(
-            (object) => object != "@parameters('$authentication')"
+        if (aTempEnvirVar) {
+            aEnvironVar = aTempEnvirVar.filter(
+                (object) => object != "@parameters('$authentication')"
             );
             iEnvironVar = aEnvironVar.length;
             if (aEnvironVar.length > 0) {
                 bEnvironVar = true;
-
             }
         }
 
         if (!bEnvironVar) {
-            aEnvironVar = JSON.stringify(removeCircularReferences(oTempItem)).match(regExpEnviron2);
-            if (aEnvironVar) {
-                console.log(JSON.stringify(removeCircularReferences(oTempItem)));
-            aEnvironVar = aEnvironVar.filter(
-                (object) => object != "@{parameters('$authentication')"
-            );
-             iEnvironVar += aEnvironVar.length;
-            if (aEnvironVar.length > 0) {
-                bEnvironVar = true;
-            }
+            aTempEnvirVar = JSON.stringify(removeCircularReferences(oTempItem)).match(regExpEnviron2);
+            if (aTempEnvirVar) {
+                aEnvironVar = aTempEnvirVar.filter(
+                    (object) => object != "@{parameters('$authentication')"
+                );
+                iEnvironVar += aEnvironVar.length;
+                if (aEnvironVar.length > 0) {
+                    bEnvironVar = true;
+                }
             }
         }
 
         let sPostionInfo = "";
-        if (item.parent==sRunAfter.split(":")[0]) {
+        if (item.parent == sRunAfter.split(":")[0]) {
             sPostionInfo = "Internal";
         }
 
@@ -311,7 +315,7 @@ function CreateReview(
             aPosition.forEach((object) => {
                 item.positionIndex += "|" + Number(object.index);
                 item.positionType += "|" + object.type;
-                let sFullNest = getNesting(item.parent,aActionReturn) + "";
+                let sFullNest = getNesting(item.parent, aActionReturn) + "";
 
                 if (sFullNest.substring(sFullNest.length - 2, 2) == "|0") {
                     sFullNest = sFullNest.substring(0, sFullNest.length - 2);
@@ -336,7 +340,7 @@ function CreateReview(
         item.type != "InitializeVariable"
     );
 
-    const aVariables = aActions.filter((item) => 
+    const aVariables = aActions.filter((item) =>
         item.type == "InitializeVariable"
     );
 
@@ -351,7 +355,7 @@ function CreateReview(
         );
 
         if (aNaming.data.filter((object) => object.Type == oInputs.type).length > 0) {
-            sNameLead = aNaming.data.find((object) => 
+            sNameLead = aNaming.data.find((object) =>
                 object.Type == oInputs.type
             ).Letter;
         }
@@ -401,10 +405,10 @@ function CreateReview(
     //// connection refs
     getDistinct(aActionReturn).forEach((item) => {
         const oAction = aActionReturn.find((object) => object.connector == item);
-        let sAppId=oAction.apiId;
-        const oConnectionRef = aConnectionReferences.find((ref) => {return ref.connection==item});
-        if(oConnectionRef){
-            sAppId=oConnectionRef.referenceName
+        let sAppId = oAction.apiId;
+        const oConnectionRef = aConnectionReferences.find((ref) => { return ref.connection == item });
+        if (oConnectionRef) {
+            sAppId = oConnectionRef.referenceName
         }
         aConnectionReturn.push({
             conName: item,
@@ -416,7 +420,7 @@ function CreateReview(
 
     aApiList = aActionReturn.filter((item) => item.type == "OpenApiConnection");
 
-    aExceptionList = aActionReturn.filter((item) => 
+    aExceptionList = aActionReturn.filter((item) =>
         item.exception == "Exception"
     );
 
@@ -441,7 +445,7 @@ function CreateReview(
         bUsed = aVariableReturn.every((element) => element.used === true);
     }
 
-    let aExceptionScope = aExceptionList.filter((item) => 
+    let aExceptionScope = aExceptionList.filter((item) =>
         item.name == "Exception"
     );
 
@@ -449,8 +453,8 @@ function CreateReview(
     let bExceptionLink = false;
 
     if (aExceptionScope) {
-        bExceptionTerminate = aExceptionScope.length > 0 &&  JSON.stringify(aExceptionScope[0].object).includes("Terminate");
-        bExceptionLink = aExceptionScope.length > 0 &&  (
+        bExceptionTerminate = aExceptionScope.length > 0 && JSON.stringify(aExceptionScope[0].object).includes("Terminate");
+        bExceptionLink = aExceptionScope.length > 0 && (
             JSON.stringify(aExceptionScope[0].object).includes(sExceptLink) ||
             JSON.stringify(aExceptionScope[0].object).includes(sExceptLink2)
         );
@@ -462,7 +466,7 @@ function CreateReview(
         let oParent = aActionReturn.find((item) => item.name == object.parent);
         if (oParent != null) {
             if (oParent.type != "If" && oParent.type != "Switch") {
-            object.branch = "";
+                object.branch = "";
             }
         }
     });
@@ -473,6 +477,7 @@ function CreateReview(
         environment: sEnvironment,
         owner: sOwner,
         trigger: sTrigger,
+        triggerType: sTriggerType,
         triggerData: sTriggerData,
         triggerParam: sTriggerParam,
         triggerConfig: sTriggerConfig,
@@ -505,7 +510,7 @@ function CreateReview(
     };
 }
 
-function getNesting(parent,aActionReturn) {
+function getNesting(parent, aActionReturn) {
     let sParents;
     if (parent != "root") {
         let oParent = aActionReturn.find((item) => {
@@ -513,26 +518,26 @@ function getNesting(parent,aActionReturn) {
         });
         sParents = oParent.index;
         if (oParent.parent != "root") {
-            sParents += "|" + getNesting(oParent.parent,aActionReturn);
+            sParents += "|" + getNesting(oParent.parent, aActionReturn);
         }
     }
     return sParents;
 }
 
 function getChildren(object, aReturn, nested, parent) {
-    if(typeof parent === 'object'){
-        parent=parent.operationName
+    if (typeof parent === 'object') {
+        parent = parent.operationName
     }
     if (object?.actions != undefined) {
         const keys = Object.keys(object.actions);
         keys.forEach((key) => {
             let value = object.actions[key];
             value.operationName = key;
-                (value.nestedLevel = nested),
+            (value.nestedLevel = nested),
                 (value.parent = parent),
                 (value.branch = "Yes");
             aReturn.push(value);
-        aReturn = getChildren(value, aReturn, nested + 1, key);
+            aReturn = getChildren(value, aReturn, nested + 1, key);
         });
     }
     if (object?.else != undefined) {
@@ -556,7 +561,7 @@ function getChildren(object, aReturn, nested, parent) {
             keys2.forEach((key2) => {
                 let value2 = object.cases[key].actions[key2];
                 value2.operationName = key2;
-                    (value2.nestedLevel = nested),
+                (value2.nestedLevel = nested),
                     (value2.parent = parent),
                     (value2.branch = key);
                 aReturn.push(value2);
@@ -567,7 +572,7 @@ function getChildren(object, aReturn, nested, parent) {
         keysDef.forEach((keyDef) => {
             let valueDefault = object.default.actions[keyDef];
             valueDefault.operationName = keyDef;
-                (valueDefault.nestedLevel = nested),
+            (valueDefault.nestedLevel = nested),
                 (valueDefault.parent = parent),
                 (valueDefault.branch = "Default");
             aReturn.push(valueDefault);
@@ -596,7 +601,7 @@ function getDistinct(arr) {
     const distinctCon = new Set();
     for (const obj of arr) {
         if (obj.connector != "") {
-        distinctCon.add(obj.connector);
+            distinctCon.add(obj.connector);
         }
     }
 
@@ -630,20 +635,20 @@ function removeCircularReferences(obj, seen = new WeakSet()) {
     return obj;
 }
 
-  // Recursively delete all nested 'actions' properties
-        function removeNestedActions(obj) {
-            if (obj && typeof obj === 'object') {
-                if (obj.hasOwnProperty('actions')) {
-                    delete obj.actions;
-                }
-                for (const key in obj) {
-                    if (obj.hasOwnProperty(key) && typeof obj[key] === 'object') {
-                        removeNestedActions(obj[key]);
-                    }
-                }
+// Recursively delete all nested 'actions' properties
+function removeNestedActions(obj) {
+    if (obj && typeof obj === 'object') {
+        if (obj.hasOwnProperty('actions')) {
+            delete obj.actions;
+        }
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key) && typeof obj[key] === 'object') {
+                removeNestedActions(obj[key]);
             }
         }
+    }
+}
 
-module.exports={
+module.exports = {
     CreateReview
 };

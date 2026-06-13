@@ -5,6 +5,7 @@ const vscode = require("vscode");
 const oConfigs=configs.configs();
 const oConnectors=connectors.connectors();
 const diagram=require("./assets/diagram.js");
+const markdownGenerator=require("./assets/markdownGenerator.js");
 
 function activate(context) {
 
@@ -44,6 +45,15 @@ function activate(context) {
     });
 
     context.subscriptions.push(arJsonSteps);
+
+	let arMarkdown = vscode.commands.registerCommand('Autoreview.getMarkdown', async function () {
+		const oData=getJSON();
+		const sMarkdown = markdownGenerator.generateMarkdownReport(oData);
+		const newDocument = await vscode.workspace.openTextDocument({ content: sMarkdown, language: "markdown" });
+		await vscode.window.showTextDocument(newDocument);
+	});
+
+    context.subscriptions.push(arMarkdown);
 
 	let arDiagram = vscode.commands.registerCommand('Autoreview.getDiagram', function () {
 		const oData=getJSON();	

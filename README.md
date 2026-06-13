@@ -12,6 +12,9 @@ Extracts key information and scores flow based on AutoReview standard config.
 ### Flow Actions
 Lists all flow actions
 
+### Flow Markdown Report
+Creates a markdown report with actions, variables, and connection references tables
+
 ### Flow Connections
 Lists all flow connections
 
@@ -75,4 +78,12 @@ Changed connectionReference to connection Reference name
 
 # 1.0.6
 
-Occassional issue with parent actions loading json not string and breaking diagram fixed
+Occasional issue with parent actions loading json not string and breaking diagram fixed
+
+# 1.0.7
+
+Edge case bug fixes and improved performance
+
+# 1.0.8
+
+Added ability to create AutoReview Report as a Markdown file
